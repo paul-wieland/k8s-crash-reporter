@@ -72,8 +72,7 @@ impl PodWatcher{
         Notify all crash_reporters with the message
      */
     async fn notify_crash_reporters(&self, pod_crash_message: PodCrashMessage){
-        self.crash_reporters.iter().for_each(
-            |crash_reporter|{
+        self.crash_reporters.iter().for_each(|crash_reporter: &Box<dyn CrashReporter>|{
                 crash_reporter.report_crash(&pod_crash_message)
             }
         )
