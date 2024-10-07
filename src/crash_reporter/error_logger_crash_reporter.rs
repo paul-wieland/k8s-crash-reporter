@@ -3,8 +3,7 @@ use crate::crash_reporter::crash_message::PodCrashMessage;
 use crate::crash_reporter::crash_reporter::CrashReporter;
 
 /*
-    CommandLineCrashReporter implements the trait CrashReporter and
-    is used for testing purpose
+    This implementation is mainly used for testing purpose
  */
 pub struct ErrorLoggerCrashReporter {}
 
