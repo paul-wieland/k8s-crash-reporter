@@ -1,3 +1,4 @@
+use std::error::Error;
 use k8s_openapi::api::core::v1::Pod;
 use kube::{Api, Client};
 use kube::runtime::{watcher, WatchStreamExt};
@@ -25,7 +26,7 @@ impl PodWatcher{
     /*
         Start watching and handling the k8s events
      */
-    pub async fn start_watching(&self) -> Result<(), Box<dyn error::Error>>{
+    pub async fn start_watching(&self) -> Result<(), Box<dyn Error>>{
         info!("Started watching pod events");
         let _ = watcher(self.api.clone(), Config::default())
             .default_backoff()

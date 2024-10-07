@@ -1,3 +1,3 @@
 pub mod crash_reporter;
 pub mod crash_message;
-pub mod command_line_crash_reporter;
+pub mod error_logger_crash_reporter;

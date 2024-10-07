@@ -3,7 +3,7 @@ mod helper;
 mod crash_reporter;
 
 use kube::{Client};
-use crate::crash_reporter::command_line_crash_reporter::CommandLineCrashReporter;
+use crate::crash_reporter::error_logger_crash_reporter::ErrorLoggerCrashReporter;
 use crate::crash_reporter::crash_reporter::CrashReporter;
 use crate::helper::logger::setup_logger;
 use crate::helper::prints::print_welcome_message;
@@ -22,7 +22,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>{
     let client: Client = Client::try_default().await?;
 
     let mut crash_reporters: Vec<Box<dyn CrashReporter>> = Vec::new();
-    crash_reporters.push(Box::new(CommandLineCrashReporter::new()));
+    crash_reporters.push(Box::new(ErrorLoggerCrashReporter::new()));
 
     // Initialize pod events watcher
     let pod_watcher = PodWatcher::new(client, crash_reporters);
