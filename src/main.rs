@@ -1,23 +1,34 @@
 mod watcher;
+mod helper;
+mod crash_reporter;
 
 use kube::{Client};
+use crate::crash_reporter::command_line_crash_reporter::CommandLineCrashReporter;
+use crate::crash_reporter::crash_reporter::CrashReporter;
+use crate::helper::logger::setup_logger;
+use crate::helper::prints::print_welcome_message;
 use crate::watcher::pod_watcher::PodWatcher;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>>{
+
+    // Logger
+    setup_logger();
+
+    // Welcome Banner
     print_welcome_message();
 
-    env_logger::init();
-
+    // Setup k8s client
     let client: Client = Client::try_default().await?;
 
-    let pod_watcher = PodWatcher::new(client);
+    let mut crash_reporters: Vec<Box<dyn CrashReporter>> = Vec::new();
+    crash_reporters.push(Box::new(CommandLineCrashReporter::new()));
+
+    // Initialize pod events watcher
+    let pod_watcher = PodWatcher::new(client, crash_reporters);
+
+    // Listening to k8s pod events
     pod_watcher.start_watching().await
 }
 
-fn print_welcome_message(){
-    println!("****************************");
-    println!("** Welcome to Pod Watcher **");
-    println!("****************************");
-}
 
