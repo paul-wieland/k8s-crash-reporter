@@ -1,1 +1,1 @@
-pub mod pod_watcher;
+pub mod kubernetes_pod_watcher;

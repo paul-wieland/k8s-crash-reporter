@@ -8,20 +8,30 @@ use log::{error, info};
 use crate::crash_reporter::crash_message::PodCrashMessage;
 use crate::crash_reporter::crash_reporter::CrashReporter;
 
-pub struct PodWatcher{
+pub struct KubernetesPodWatcher {
     api: Api<Pod>,
     crash_reporters: Vec<Box<dyn CrashReporter>>
 }
 
-impl PodWatcher{
+impl KubernetesPodWatcher {
 
     /*
         Initialize PodWatcher by providing k8s client and a collection of CrashReporters (allows multiple reporter)
      */
-    pub fn new(client: Client, crash_reporters: Vec<Box<dyn CrashReporter>>) -> Self{
-        let api = Api::<Pod>::all(client);
-        Self {api, crash_reporters}
+    pub async fn new(crash_reporters: Vec<Box<dyn CrashReporter>>) -> Result<Self, Box<dyn Error>>{
+        let kubernetes_client = Self::initialize_kubernetes_client().await?;
+        let api = Api::<Pod>::all(kubernetes_client);
+        Ok(Self {api, crash_reporters})
     }
+
+    pub async fn initialize_kubernetes_client() -> Result<Client, Box<dyn Error>>{
+        let client_result = Client::try_default().await;
+        match client_result {
+            Ok(client) => Ok(client),
+            Err(_) => Err("Could not initialize kubernets client. Make sure to provide kubernetes context".into())
+        }
+    }
+
 
     /*
         Start watching and handling the k8s events
@@ -58,9 +68,8 @@ impl PodWatcher{
                         if &waiting.reason.as_ref().unwrap().clone() == "CrashLoopBackOff"{
                             info!("Pod {} is in CrashLoopBackOff", pod_name);
                             self.notify_crash_reporters(
-                                PodCrashMessage{
-                                    pod_name: pod_name.clone(), state: "CrashLoopBackOff".into()
-                                }
+                                PodCrashMessage::new(
+                                    pod_name.clone(), "CrashLoopBackOff".into())
                             ).await
                         }
                     }
@@ -73,9 +82,8 @@ impl PodWatcher{
         Notify all crash_reporters with the message
      */
     async fn notify_crash_reporters(&self, pod_crash_message: PodCrashMessage){
-        self.crash_reporters.iter().for_each(|crash_reporter: &Box<dyn CrashReporter>|{
-                crash_reporter.report_crash(&pod_crash_message)
-            }
-        )
+        for r in &self.crash_reporters{
+            r.report_crash(&pod_crash_message).await;
+        }
     }
 }

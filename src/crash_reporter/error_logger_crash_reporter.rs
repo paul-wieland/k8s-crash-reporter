@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use log::error;
 use crate::crash_reporter::crash_message::PodCrashMessage;
 use crate::crash_reporter::crash_reporter::CrashReporter;
@@ -14,9 +15,10 @@ impl ErrorLoggerCrashReporter {
     }
 }
 
+#[async_trait]
 impl CrashReporter for ErrorLoggerCrashReporter {
 
-    fn report_crash(&self, pod_crash_message: &PodCrashMessage) {
-        error!("Pod {} is in state {}", pod_crash_message.pod_name, pod_crash_message.state)
+    async fn report_crash(&self, pod_crash_message: &PodCrashMessage) {
+        error!("{}", pod_crash_message.formatted_message())
     }
 }
