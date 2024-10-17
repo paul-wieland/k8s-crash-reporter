@@ -4,7 +4,7 @@ use kube::{Api, Client};
 use kube::runtime::{watcher, WatchStreamExt};
 use kube::runtime::watcher::{Config, Event};
 use futures::TryStreamExt;
-use log::{error, info};
+use log::{info};
 use crate::crash_reporter::crash_message::PodCrashMessage;
 use crate::crash_reporter::crash_reporter::CrashReporter;
 

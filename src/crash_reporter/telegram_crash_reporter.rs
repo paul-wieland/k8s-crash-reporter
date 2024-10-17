@@ -1,6 +1,7 @@
 use std::env;
 use std::error::Error;
 use async_trait::async_trait;
+use log::{error, info};
 use teloxide::Bot;
 use crate::crash_reporter::crash_message::PodCrashMessage;
 use crate::crash_reporter::crash_reporter::CrashReporter;
@@ -32,9 +33,9 @@ impl TelegramCrashReporter{
 impl CrashReporter for TelegramCrashReporter{
     async fn report_crash(&self, pod_crash_message: &PodCrashMessage) {
         if let Ok(_) = self.bot.send_message(self.chat_id.clone(), pod_crash_message.formatted_message()).await{
-
+            info!("Published message to telegram: {}", pod_crash_message.formatted_message())
         }else{
-
+            error!("Could not publish message to telegram: {}", pod_crash_message.formatted_message())
         }
     }
 }
