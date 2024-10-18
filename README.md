@@ -17,6 +17,6 @@ and report your those via Telegram (Other report channels might be implemented).
 
 ## Features
 
-- [x] Reporting pods in state ```CrashLoopBackOff``` to telegram channel
+- [x] Reporting pods in state ```CrashLoopBackOff``` to your telegram channel
 - [ ] Running tests with test containers
 
