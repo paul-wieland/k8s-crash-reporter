@@ -1,9 +1,9 @@
 
 # K8s Crash Reporter
 
-This service is fully written in rust and can be deployed to your 
+This service is fully written in rust using [kube-rs](https://kube.rs/) library and can be deployed to your 
 kubernetes cluster. There it will observe pods in state ```CrashLoopBackOff```
-and report you those via Telegram (Other report channels might be implemented).
+and report you those via Telegram.
 
 <p align="center">
 <img src="/assets/architecture.png" height="400" alt=""/>
