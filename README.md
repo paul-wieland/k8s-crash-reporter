@@ -21,7 +21,7 @@ and report you those via Telegram.
 Execute the following command to create the secrets:
 
 ```
-kubectl apply -f deployment/k8s-crash-reporter.yaml
+kubectl apply -f deployment/secrets.yaml
 ```
 
 
@@ -30,7 +30,7 @@ kubectl apply -f deployment/k8s-crash-reporter.yaml
 Execute the following command to create the deployment:
 
 ```
-kubectl apply -f deployment/secrets.yaml
+kubectl apply -f deployment/k8s-crash-reporter.yaml
 ```
 
 ***3. Test the Deployment***
