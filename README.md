@@ -58,6 +58,10 @@ spec:
   restartPolicy: Always  # This ensures the pod will keep restarting (causing the crash loop)
 ```
 
+## Development
+
+You can simply run the service executing ```cargo run```. Make sure to provide ```TOKEN```
+and ```CHAT_ID``` via environment variable. Also make sure, you are in a valid [Kubernetes context](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_config/kubectl_config_current-context/).
 
 ## Features
 
@@ -65,4 +69,5 @@ spec:
 - [x] Provide Kubernetes deployment
 - [ ] Filter crash reports based on label/namespace
 - [ ] Support other report channels (e.g. Teams, E-Mail, ...)
+- [ ] Add linter for code formatting and checks
 
