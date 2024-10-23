@@ -3,7 +3,7 @@
 
 This service is fully written in rust and can be deployed to your 
 kubernetes cluster. There it will observe pods in state ```CrashLoopBackOff```
-and report your those via Telegram (Other report channels might be implemented).
+and report you those via Telegram (Other report channels might be implemented).
 
 <p align="center">
 <img src="/assets/architecture.png" height="400" alt=""/>
